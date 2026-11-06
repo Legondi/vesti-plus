@@ -188,9 +188,6 @@ footer{max-width:1040px;margin:36px auto 0;padding:20px;border-top:1px solid var
 </div>
 
 <script>
-// TROQUE PELO SEU E-MAIL
-const EMAIL_DESTINO = "leogdias12@gmail.com";
-
 const $ = id => document.getElementById(id);
 const v = id => $(id).value.trim() || "—";
 const cm = id => { const x = $(id).value.trim(); return x ? x + " cm" : "—"; };
@@ -217,14 +214,11 @@ $("salvar").addEventListener("click", () => {
     li.append(s, b); ul.append(li);
   });
   $("modal").style.display = "flex";
-  const dados = {}; itens.forEach(([k, val]) => dados[k] = val);
-  dados["E-mail"] = v("email");
-  dados._subject = "Novo perfil Vesti+";
-  dados._captcha = "false";
-  fetch("https://formsubmit.co/ajax/" + EMAIL_DESTINO, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify(dados)
+  const texto = itens.map(([k, val]) => k + ": " + val).join("\n") + "\nE-mail: " + v("email");
+  const corpo = new URLSearchParams();
+  corpo.append("entry.1978004426", texto);
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLSfkQElBEcHJHAMoLRcXcaFG4yL76mzISOM9asfXsk1i-FA_Tw/formResponse", {
+    method: "POST", mode: "no-cors", body: corpo
   }).catch(() => {});
 });
 $("fechar").addEventListener("click", () => {
